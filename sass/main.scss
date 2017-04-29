@@ -1,6 +1,8 @@
 @import "colors";
-
-body{
-	background: url('') no-repeat center center fixed;
-	background-color: $green;
+body {
+    //background: url(blue.jpg) no-repeat center center fixed;
+    //background-color: $green;
+    background-color: rgba(17, 90, 158, 1);
+    background: @include filter-gradient(#115a9e, #93c2f5, horizontal);
+    background: @include background-image(linear-gradient(left top, rgba(17, 90, 158, 1) 0%, rgba(147, 194, 245, 1) 100%));
 }
