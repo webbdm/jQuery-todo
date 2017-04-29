@@ -29,6 +29,15 @@ var FbApi = ((old) => {
     	});
     });
 
+    old.checker = (id) => {
+    	return new Promise((resolve,reject)=>{
+    		FbApi.setChecked(id);
+    		resolve();
+    	});
+    };
+
+
+
     return old;
 
 })(FbApi || {});

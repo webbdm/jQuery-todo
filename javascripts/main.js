@@ -41,6 +41,17 @@ $(document).ready(function() {
     // Edit todo
 
     // Complete
+    $('.main-container').on('click', 'input[type="checkbox"]', (e)=>{
+    	id = e.target.id;
+    	FbApi.checker(id).then(()=>{
+    		FbApi.writeDom();
+    		countTask();
+    	}).catch((error)=>{
+    		console.log("checker error", error);
+    	});
+    });
+
+
     let countTask = () => {
     	let remainingTasks = $('#incomplete-tasks li').length;
     	$('#counter').hide().fadeIn(2500).html(remainingTasks);
