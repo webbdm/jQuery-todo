@@ -1,5 +1,10 @@
 body {
-  background: url(blue.jpg) no-repeat center center fixed;
-  background-color: green; 
+  background-color: green;
+  background: linear-gradient(#0B2247, #0B2247 30%, #090D29) no-repeat center center fixed;
+  bacground-size: cover; }
 
-}
+h3 {
+  color: white; }
+
+.glyphicon {
+  margin: 0px 10px; }
