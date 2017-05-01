@@ -32,29 +32,39 @@ $(document).ready(function() {
             FbApi.writeDom(newTodo);
             countTask();
         }).catch((error) => {
-        	console.log("Todo error", error);
+            console.log("Todo error", error);
         });
     });
 
     // Delete todo
+    $('.main-container').on("click", '.delete', (event) => {
+        FbApi.deleteTodo(event.target.id).then(() => {
+        	FbApi.writeDom();
+        	countTask();
+        }).catch((error) => {
+        	console.log("error in deleteTodo", error);
+        });
+    });
+
 
     // Edit todo
 
     // Complete
-    $('.main-container').on('click', 'input[type="checkbox"]', (e)=>{
-    	id = e.target.id;
-    	FbApi.checker(id).then(()=>{
-    		FbApi.writeDom();
-    		countTask();
-    	}).catch((error)=>{
-    		console.log("checker error", error);
-    	});
+    $('.main-container').on('click', 'input[type="checkbox"]', (e) => {
+    	console.log("test");
+        id = e.target.id;
+        FbApi.checker(id).then(() => {
+            FbApi.writeDom();
+            countTask();
+        }).catch((error) => {
+            console.log("checker error", error);
+        });
     });
 
 
     let countTask = () => {
-    	let remainingTasks = $('#incomplete-tasks li').length;
-    	$('#counter').hide().fadeIn(2500).html(remainingTasks);
+        let remainingTasks = $('#incomplete-tasks li').length;
+        $('#counter').hide().fadeIn(2500).html(remainingTasks);
     };
 
 

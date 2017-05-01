@@ -8,6 +8,7 @@ var FbAPI = ((old) => {
 
         todos.forEach((todo) => {
             if (todo.isCompleted) {
+                console.log();
                 doneString += `<li>`;
                 doneString += `<div class="col-xs-10">`;
                 doneString += `<input class="checkboxStyle" id="${todo.id}" type="checkbox" checked>`;
@@ -31,7 +32,7 @@ var FbAPI = ((old) => {
             }
         });
 
-        $('#completed-task').html(doneString);
+        $('#completed-tasks').html(doneString);
         $('#incomplete-tasks').html(notDoneString);
 
     };
