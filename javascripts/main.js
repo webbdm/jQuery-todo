@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    let apiKeys;
+    let editId = "";
 
     $('#new-item').click(() => {
         $('.list-container').addClass('hide');
@@ -10,74 +12,78 @@ $(document).ready(function() {
         $('.list-container').removeClass('hide');
     });
 
-    // Get Todo
-    FbApi.getTodos().then(() => {
-            FbApi.writeDom();
-            countTask();
-        })
-        .catch((error) => {
-            console.log("getTodos Error", error);
-        });
+    FbApi.firebaseCredentials().then((keys) => {
+        apiKeys = keys;
+        firebase.initializeApp(apiKeys);
+        FbApi.writeDom(apiKeys);
+    }).catch((error) => {
+        console.log("key errors", error);
+    });
 
-    // Add todo
+    //add todo
     $('#add-todo-button').click(() => {
         let newTodo = {
             isCompleted: false,
             task: $('#add-todo-text').val()
         };
-        FbApi.addTodo(newTodo).then(() => {
-            $('#add-todo-text').val();
-            $('.new-container').addClass('hide');
-            $('.list-container').removeClass('hide');
-            FbApi.writeDom(newTodo);
-            countTask();
-        }).catch((error) => {
-            console.log("Todo error", error);
-        });
+        if (editId.length > 0) {
+            //edit
+            FbApi.editTodo(apiKeys, newTodo, editId).then(() => {
+                $('#add-todo-text').val("");
+                editId = "";
+                $('.new-container').addClass('hide');
+                $('.list-container').removeClass('hide');
+                FbApi.writeDom(apiKeys);
+            }).catch((error) => {
+                console.log("addTodo error", error);
+            });
+        } else {
+            FbApi.addTodo(apiKeys, newTodo).then(() => {
+                $('#add-todo-text').val("");
+                $('.new-container').addClass('hide');
+                $('.list-container').removeClass('hide');
+                FbApi.writeDom(apiKeys);
+            }).catch((error) => {
+                console.log("addTodo error", error);
+            });
+        }
     });
 
-    // Delete todo
-    $('.main-container').on("click", '.delete', (event) => {
-        FbApi.deleteTodo(event.target.id).then(() => {
-            FbApi.writeDom();
-            countTask();
+
+    //delete todo
+    $('.main-container').on('click', '.delete', (event) => {
+        FbApi.deleteTodo(apiKeys, event.target.id).then(() => {
+            FbApi.writeDom(apiKeys);
         }).catch((error) => {
             console.log("error in deleteTodo", error);
         });
     });
 
 
-    // Edit todo
+    //edit todo
     $('.main-container').on('click', '.edit', (event) => {
         let editText = $(event.target).closest('.col-xs-4').siblings('.col-xs-8').find('.task').html();
-        FbApi.editTodo(event.target.id).then(() => {
-        	$('.list-container').addClass('hide');
-            $('.new-container').removeClass('hide');
-            $('#add-todo-text').val(editText);
-        }).catch((error) => {
-            console.log("error from edit todo", error);
-        });
+        editId = event.target.id;
+        $('.list-container').addClass('hide');
+        $('.new-container').removeClass('hide');
+        $('#add-todo-text').val(editText);
     });
 
 
-    // Complete
-    $('.main-container').on('click', 'input[type="checkbox"]', (e) => {
-        console.log("test");
-        id = e.target.id;
-        FbApi.checker(id).then(() => {
-            FbApi.writeDom();
-            countTask();
+
+
+    //complete todos
+    $('.main-container').on('click', 'input[type="checkbox"]', (event) => {
+        let myTodo = {
+            isCompleted: event.target.checked,
+            task: $(event.target).siblings('.task').html()
+        };
+        FbApi.editTodo(apiKeys, myTodo, event.target.id).then(() => {
+            FbApi.writeDom(apiKeys);
         }).catch((error) => {
             console.log("checker error", error);
         });
     });
-
-
-    let countTask = () => {
-        let remainingTasks = $('#incomplete-tasks li').length;
-        $('#counter').hide().fadeIn(2500).html(remainingTasks);
-    };
-
 
 
 });
