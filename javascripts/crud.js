@@ -43,6 +43,13 @@ var FbApi = ((old) => {
     	});
     };
 
+    old.editTodo = (id) => {
+    	return new Promise ((resolve, reject)=>{
+    		FbApi.duhlete(id);
+    		resolve();
+    	});
+    };
+
 
     return old;
 
